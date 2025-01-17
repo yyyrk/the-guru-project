@@ -1,65 +1,96 @@
 # Clear the database
 puts "Clearing database..."
 TestResult.destroy_all
-User.destroy_all
-Category.destroy_all
-Test.destroy_all
-Question.destroy_all
 Answer.destroy_all
+Question.destroy_all
+Test.destroy_all
+Category.destroy_all
+User.destroy_all
 puts "Database cleared successfully."
 
 # Create users
 puts "Creating users..."
-users = User.create!([
-                       { name: 'Andrey', email: 'andrey@example.com' },
-                       { name: 'Pavel', email: 'pavel@example.com' }
-                     ])
+users = [
+  User.create!(name: 'Andrey', email: 'andrey@example.com'),
+  User.create!(name: 'Pavel', email: 'pavel@example.com'),
+  User.create!(name: 'Maria', email: 'maria@example.com'),
+  User.create!(name: 'Olga', email: 'olga@example.com')
+]
 puts "Users created: #{users.count}"
 
 # Create categories
 puts "Creating categories..."
-categories = Category.create!([
-                                { name: 'Geography' },
-                                { name: 'History' }
-                              ])
+categories = [
+  Category.create!(name: 'Geography'),
+  Category.create!(name: 'History'),
+  Category.create!(name: 'Science')
+]
 puts "Categories created: #{categories.count}"
 
 # Create tests
 puts "Creating tests..."
-tests = Test.create!([
-                       { title: 'Countries of Europe', level: 1, category_id: categories[0].id, author_id: users[0].id },
-                       { title: 'Ancient Civilizations', level: 2, category_id: categories[1].id, author_id: users[1].id },
-                       { title: 'Capitals of the World', level: 1, category_id: categories[0].id, author_id: users[0].id }
-                     ])
+tests = [
+  users[0].authored_tests.create!(title: 'Countries of Europe', level: 1, category_id: categories[0].id),
+  users[1].authored_tests.create!(title: 'Ancient Civilizations', level: 2, category_id: categories[1].id),
+  users[0].authored_tests.create!(title: 'Capitals of the World', level: 1, category_id: categories[0].id),
+  users[2].authored_tests.create!(title: 'Physics Basics', level: 3, category_id: categories[2].id)
+]
 puts "Tests created: #{tests.count}"
 
 # Create questions
 puts "Creating questions..."
-questions = Question.create!([
-                               { content: 'What is the capital of France?', test_id: tests[2].id },
-                               { content: 'Which country is known for the Colosseum?', test_id: tests[1].id },
-                               { content: 'What is the largest country in Europe?', test_id: tests[0].id }
-                             ])
+questions = [
+  tests[2].questions.create!(content: 'What is the capital of France?'),
+  tests[1].questions.create!(content: 'Which country is known for the Colosseum?'),
+  tests[0].questions.create!(content: 'What is the largest country in Europe?'),
+  tests[3].questions.create!(content: 'What is Newton\'s second law?')
+]
 puts "Questions created: #{questions.count}"
 
 # Create answers
 puts "Creating answers..."
-Answer.create!([
-                 { content: 'Paris', correct: true, question_id: questions[0].id },
-                 { content: 'Rome', correct: true, question_id: questions[1].id },
-                 { content: 'Russia', correct: true, question_id: questions[2].id },
-                 { content: 'Germany', correct: false, question_id: questions[2].id },
-                 { content: 'London', correct: false, question_id: questions[0].id },
-                 { content: 'Athens', correct: false, question_id: questions[1].id }
-               ])
-puts "Answers created successfully."
+answers = [
+  questions[0].answers.create!(content: 'Paris', correct: true),
+  questions[1].answers.create!(content: 'Rome', correct: true),
+  questions[2].answers.create!(content: 'Russia', correct: true),
+  questions[2].answers.create!(content: 'Germany', correct: false),
+  questions[0].answers.create!(content: 'London', correct: false),
+  questions[1].answers.create!(content: 'Athens', correct: false),
+  questions[3].answers.create!(content: 'F = ma', correct: true),
+  questions[3].answers.create!(content: 'E = mc²', correct: false)
+]
+puts "Answers created successfully. Total answers: #{answers.count}"
 
 # Create test results
 puts "Creating test results..."
-test_results = TestResult.create!([
-                                    { user_id: users[0].id, test_id: tests[0].id, completed: true, score: 80 },
-                                    { user_id: users[1].id, test_id: tests[2].id, completed: true, score: 100 }
-                                  ])
+test_results = [
+  users[0].test_results.create!(test: tests[0], completed: true, score: 80),
+  users[1].test_results.create!(test: tests[2], completed: true, score: 100),
+  users[2].test_results.create!(test: tests[3], completed: false, score: 50),
+  users[0].test_results.create!(test: tests[1], completed: true, score: 90)
+]
 puts "Test results created: #{test_results.count}"
+
+# Additional examples
+puts "Creating additional examples..."
+additional_tests = [
+  users[1].authored_tests.create!(title: 'Famous Landmarks', level: 2, category_id: categories[0].id),
+  users[2].authored_tests.create!(title: 'World Wars', level: 3, category_id: categories[1].id)
+]
+puts "Additional tests created: #{additional_tests.count}"
+
+additional_questions = [
+  additional_tests[0].questions.create!(content: 'Where is the Eiffel Tower located?'),
+  additional_tests[1].questions.create!(content: 'Which countries were part of the Allies in World War II?')
+]
+puts "Additional questions created: #{additional_questions.count}"
+
+additional_answers = [
+  additional_questions[0].answers.create!(content: 'Paris', correct: true),
+  additional_questions[0].answers.create!(content: 'London', correct: false),
+  additional_questions[1].answers.create!(content: 'USA, UK, USSR', correct: true),
+  additional_questions[1].answers.create!(content: 'Germany, Japan, Italy', correct: false)
+]
+puts "Additional answers created: #{additional_answers.count}"
 
 puts "Hallelujah! We did it!!! Seed data created successfully!!!"
