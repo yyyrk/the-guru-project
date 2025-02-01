@@ -13,9 +13,10 @@ class Test < ApplicationRecord
     greater_than_or_equal_to: 0
   }
 
-  scope :easy, -> { where(level: [ 0, 1 ]) }
+  scope :easy, -> { where(level: [0, 1]) }
   scope :medium, -> { where(level: 2..4) }
   scope :hard, -> { where("level >= ?", 5) }
+  scope :by_level, ->(level) { where(level: level) }
   scope :by_category_name, (
     lambda do |category_name|
       joins(:category)

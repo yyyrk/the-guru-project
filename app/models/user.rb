@@ -5,9 +5,9 @@ class User < ApplicationRecord
 
   validates :name, presence: true
   validates :email, presence: true,
-                    uniqueness: { case_sensitive: false } # чтобы игнорировать регистр
+                    uniqueness: { case_sensitive: false }
 
   def tests_by_level(level)
-    tests.where(level: level)
+    tests.by_level(level)
   end
 end
