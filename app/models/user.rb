@@ -4,8 +4,7 @@ class User < ApplicationRecord
   has_many :author_tests, class_name: "Test", foreign_key: "author_id"
 
   validates :name, presence: true
-  validates :email, presence: true,
-                    uniqueness: { case_sensitive: false }
+  validates :email, presence: true, uniqueness: { case_sensitive: false }
 
   def tests_by_level(level)
     tests.by_level(level)
