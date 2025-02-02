@@ -7,6 +7,8 @@ class CreateTests < ActiveRecord::Migration[8.0]
       t.references :author, null: false, foreign_key: { to_table: :users }
 
       t.timestamps
+
+      add_index :tests, [ :title, :level ], unique: true
     end
   end
 end
