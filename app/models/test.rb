@@ -17,6 +17,10 @@ class Test < ApplicationRecord
     joins(:category)
       .where(categories: { title: category_name })
       .order(title: :desc)
-      .pluck(:title)
   }
+
+  # Добавил отдельный метод для получения массива заголовков с плак
+  def self.titles_by_category(category_name)
+    by_category_name(category_name).pluck(:title)
+  end
 end

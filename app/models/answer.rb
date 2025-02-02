@@ -9,7 +9,8 @@ class Answer < ApplicationRecord
   private
 
   def validate_answers_count
-    errors.add(:question, "Too many answers! (must be less than 5)") if question.answers.size >= 4
-    errors.add(:question, "At least one answer is required") if question.answers.size < 1
+    if question.answers.count >= 4
+      errors.add(:question, "Too many answers! (must be less than 5)")
+    end
   end
 end
