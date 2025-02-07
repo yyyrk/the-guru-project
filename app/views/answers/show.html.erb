@@ -1,0 +1,19 @@
+<h1>Question</h1>
+
+<p>
+  <%= @answer.question.body %>
+</p>
+
+<p>
+  <strong>Answers body:</strong>
+  <%= @answer.body %>
+</p>
+
+<p>
+  <strong>Answer is correct?</strong>
+  <%= @answer.correct %>
+</p>
+
+<%= link_to 'Edit answer', edit_answer_path(@answer) %> |
+
+<%= link_to 'Back to Question', question_path(@answer.question) %>
